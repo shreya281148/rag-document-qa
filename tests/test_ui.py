@@ -64,3 +64,25 @@ def test_invalid_chunk_settings_are_rejected(app):
     sliders["Chunk size (characters)"].set_value(200)
     sliders["Chunk overlap (characters)"].set_value(300).run()
     assert any("smaller than the chunk size" in e.value for e in app.sidebar.error)
+
+
+def test_uploaded_file_is_indexed_automatically_and_answerable(app):
+    # No button press needed: adding a file is enough.
+    app.sidebar.file_uploader[0].set_value(("notes.txt", b"The office is closed on 24 December for the holiday.", "text/plain")).run()
+    assert not app.exception
+    assert any("Indexed 1 file(s)" in s.value for s in app.sidebar.success)
+    assert any("notes.txt" in m.value for m in app.sidebar.markdown)
+    assert app.chat_input[0].disabled is False
+
+    app.chat_input[0].set_value("When is the office closed?").run()
+    assistant_text = " ".join(m.value for m in app.chat_message[1].markdown)
+    assert "24 December" in assistant_text
+
+
+def test_same_upload_is_not_indexed_twice_on_rerun(app):
+    app.sidebar.file_uploader[0].set_value(("notes.txt", b"Office hours are 9 to 5.", "text/plain")).run()
+    assert any("Indexed 1 file(s)" in s.value for s in app.sidebar.success)
+    app.run()  # any later interaction reruns the script; the file must not be re-indexed
+    assert not any("Indexed" in s.value for s in app.sidebar.success)
+    chunks_line = [m.value for m in app.sidebar.markdown if "notes.txt" in m.value]
+    assert len(chunks_line) == 1 and "(1 chunks)" in chunks_line[0]

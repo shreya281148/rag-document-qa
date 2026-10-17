@@ -2,7 +2,7 @@
 
 Run:  streamlit run app.py
 
-Upload PDFs / text files, index them, then ask questions. Every answer shows the exact
+Upload PDFs / text files (they are indexed automatically), then ask questions. Every answer shows the exact
 passages (file, page, similarity) it was based on. Everything runs on this computer.
 """
 
@@ -80,29 +80,44 @@ pipe = get_pipeline(offline, model, top_k, chunk_size, chunk_overlap, base.stora
 
 # --------------------------------------------------------------------------- documents
 st.sidebar.subheader("Documents")
-uploads = st.sidebar.file_uploader("Upload PDF, TXT or MD files", type=["pdf", "txt", "md"], accept_multiple_files=True)
-col_a, col_b = st.sidebar.columns(2)
+st.session_state.setdefault("uploader_round", 0)
+st.session_state.setdefault("indexed_uploads", set())
 
-if col_a.button("Index uploads", disabled=not uploads, use_container_width=True):
+uploads = st.sidebar.file_uploader(
+    "Upload PDF, TXT or MD files",
+    type=["pdf", "txt", "md"],
+    accept_multiple_files=True,
+    key=f"uploader_{st.session_state.uploader_round}",
+    help="Files are indexed automatically as soon as you add them. Nothing leaves this computer.",
+)
+
+# Index every newly added file automatically. The key includes the embedder so that switching
+# between real and offline mode indexes the same file again for the other model.
+fresh = [f for f in uploads if (f.name, f.size, pipe.embedder.id) not in st.session_state.indexed_uploads]
+if fresh:
     try:
-        with st.spinner("Reading, chunking and embedding..."), tempfile.TemporaryDirectory() as tmp:
+        with st.sidebar, st.spinner("Reading, chunking and embedding..."), tempfile.TemporaryDirectory() as tmp:
             paths = []
-            for f in uploads:
+            for f in fresh:
                 target = Path(tmp) / Path(f.name).name  # keep the real file name for citations
                 target.write_bytes(f.getbuffer())
+                pipe.remove_source(target.name)  # replace an older version of the same file
                 paths.append(target)
             report = pipe.ingest(paths)
+        st.session_state.indexed_uploads.update((f.name, f.size, pipe.embedder.id) for f in fresh)
         st.sidebar.success(f"Indexed {report.files} file(s) into {report.chunks} chunks.")
     except RagError as exc:
         st.sidebar.error(str(exc))
 
-if col_b.button("Load samples", use_container_width=True, help="Index the example documents in sample_docs/"):
-    try:
-        with st.spinner("Indexing sample documents..."):
-            report = pipe.ingest([SAMPLE_DIR])
-        st.sidebar.success(f"Indexed {report.files} sample file(s) into {report.chunks} chunks.")
-    except RagError as exc:
-        st.sidebar.error(str(exc))
+with st.sidebar.expander("Try the bundled sample documents"):
+    st.caption("Optional: three fictional documents (handbook, IT policy, LLM guide) for a quick test.")
+    if st.button("Load samples", use_container_width=True, help="Index the example documents in sample_docs/"):
+        try:
+            with st.spinner("Indexing sample documents..."):
+                report = pipe.ingest([SAMPLE_DIR])
+            st.success(f"Indexed {report.files} sample file(s) into {report.chunks} chunks.")
+        except RagError as exc:
+            st.error(str(exc))
 
 indexed = pipe.indexed_sources()
 if indexed:
@@ -111,6 +126,8 @@ if indexed:
     if st.sidebar.button("Clear index", use_container_width=True):
         pipe.reset()
         st.session_state.pop("messages", None)
+        st.session_state.indexed_uploads = set()
+        st.session_state.uploader_round += 1  # gives a fresh, empty uploader
         st.rerun()
 else:
     st.sidebar.info("No documents indexed yet.")
@@ -143,7 +160,7 @@ for msg in st.session_state.messages:
         show_sources(msg.get("sources"), msg["content"])
 
 if not indexed:
-    st.info("Upload documents (or click **Load samples**) in the sidebar to get started.")
+    st.info("Upload one or more documents in the sidebar, then ask your question here.")
 
 if question := st.chat_input("Ask a question about your documents", disabled=not indexed):
     st.session_state.messages.append({"role": "user", "content": question})

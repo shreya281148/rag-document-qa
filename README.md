@@ -34,6 +34,8 @@ Why this design:
 
 ## Quick start
 
+Requires **Python 3.10 or newer** (check with `python3 --version`).
+
 ### 1. Install Ollama and the models
 
 Install [Ollama](https://ollama.com), then pull a language model and an embedding model:
@@ -69,7 +71,7 @@ It reports whether the Ollama server is running and the configured models are in
 streamlit run app.py
 ```
 
-Click **Load samples** (or upload your own PDF/TXT/MD files and click **Index uploads**), then ask a question. Open **Sources** under an answer to see the passages behind it.
+Upload your own PDF, TXT or MD files in the sidebar. They are indexed automatically. Then type a question in the chat box. Open **Sources** under an answer to see the passages behind it. (The sidebar also has an optional *Try the bundled sample documents* section.)
 
 **Command line**
 
@@ -150,7 +152,7 @@ src/ragqa/
     pipeline.py             ingest + retrieve + answer, ties it all together
     evaluate.py             retrieval metrics
     doctor.py, cli.py       setup check and command line
-tests/                      87 tests, including a fake Ollama HTTP server
+tests/                      93 tests, including a fake Ollama HTTP server
 sample_docs/                synthetic documents (md, txt, pdf) for demos and tests
 eval/qa_set.jsonl           questions with expected sources and evidence phrases
 docs/HOW_IT_WORKS.md        guided tour of the code
@@ -168,7 +170,8 @@ The tests cover config validation, chunking, loaders (including PDF), embeddings
 ## Limitations
 
 - **Scanned PDFs** have no text layer and are skipped (no OCR yet).
-- **Tables and complex layouts** lose their structure when converted to text.
+- **PDF reading order** is chosen per page: position-based for CVs, forms and tables, column by column for multi-column pages. The multi-column detection is a heuristic and can be wrong on unusual layouts.
+- **Tables and complex layouts** lose some of their structure when converted to text.
 - **Answers spread across many documents** may need a larger `top_k` or are not synthesised well by small models.
 - **Small local models** (such as 3B parameters) are less capable than large hosted models; they can still misread passages, so check the cited sources.
 - Single-user, local tool: no authentication or multi-user access control.
