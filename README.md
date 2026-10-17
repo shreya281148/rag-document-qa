@@ -4,7 +4,7 @@ Local, privacy-first document Q&A using Retrieval-Augmented Generation (RAG): ch
 
 Documents are split into chunks, embedded, and stored in a local vector database. When you ask a question, the most relevant chunks are retrieved and handed to a **locally hosted language model (Qwen 2.5 via Ollama by default)**, which answers using only that text and cites its sources. No document, question or answer leaves your computer.
 
-> **About this project.** An independent portfolio/demo project that explores a privacy-first RAG architecture. It uses only synthetic sample documents and contains no code or data from any employer or university. It was developed with AI assistance; behaviour is covered by an automated test suite.
+> **About this project.** An independent portfolio/demo project that explores a privacy-first RAG architecture. It uses only synthetic sample documents and contains no code or data from any employer or university. 
 
 ## How it works
 
