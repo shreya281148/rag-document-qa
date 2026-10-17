@@ -1,0 +1,7 @@
+chromadb>=0.5
+streamlit>=1.35
+pypdf>=4.0
+pyyaml>=6.0
+numpy>=1.24
+requests>=2.31
+pytest>=8.0

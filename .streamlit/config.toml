@@ -1,0 +1,3 @@
+# Privacy-first: do not send anonymous usage statistics anywhere.
+[browser]
+gatherUsageStats = false

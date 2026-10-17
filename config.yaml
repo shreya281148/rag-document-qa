@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------------------
+# rag-document-qa configuration
+#
+# Everything you can tune lives here. To switch the model, change ONE line
+# under `llm:` (for example qwen2.5:3b -> qwen2.5:7b or llama3.2:3b).
+# Any value can also be overridden with an environment variable, see README.
+# ---------------------------------------------------------------------------
+
+llm:
+  # Which backend answers questions:
+  #   ollama      - a model served by Ollama on this machine (default, 100% local)
+  #   openai_compat - any OpenAI-compatible server you run yourself, e.g. vLLM
+  #   extractive  - no AI model: returns the most relevant sentences (testing / fallback)
+  provider: ollama
+  model: qwen2.5:3b            # Qwen 2.5 served locally by Ollama
+  base_url: http://localhost:11434
+  temperature: 0.1             # low = factual, repeatable answers
+  num_ctx: 4096                # context window requested from Ollama (room for retrieved chunks)
+  timeout_s: 120
+
+embeddings:
+  # ollama - a real embedding model served locally (default)
+  # hash   - tiny offline embedder with no model download (testing / fallback)
+  provider: ollama
+  model: nomic-embed-text
+  base_url: http://localhost:11434
+  # nomic-embed-text was trained with task prefixes; they improve retrieval.
+  doc_prefix: "search_document: "
+  query_prefix: "search_query: "
+  timeout_s: 60
+
+chunking:
+  chunk_size: 800              # target characters per chunk
+  chunk_overlap: 120           # characters shared between neighbouring chunks
+
+retrieval:
+  top_k: 4                     # how many chunks are handed to the LLM
+  # Cosine-similarity floor: chunks scoring below it are ignored, and if none pass, the app says
+  # "not found" instead of letting the model guess. "auto" picks a default for the embedder in
+  # use; set a number (e.g. 0.35) to tune it. Use `ragqa ask --show-scores` to see real scores.
+  min_score: auto
+
+storage:
+  persist_dir: .chroma         # local vector database folder (git-ignored)
+  telemetry: false             # keep it fully private

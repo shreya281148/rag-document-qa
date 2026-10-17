@@ -1,0 +1,20 @@
+{"question": "How many days of annual leave do full-time employees get?", "source": "employee_handbook.md", "expect": "28 days"}
+{"question": "How many unused leave days can be carried over to the next year?", "source": "employee_handbook.md", "expect": "5 unused days"}
+{"question": "From which day of sickness is a medical certificate required?", "source": "employee_handbook.md", "expect": "third consecutive day"}
+{"question": "How many days per week can employees work remotely?", "source": "employee_handbook.md", "expect": "three days per week"}
+{"question": "What is the maximum meal reimbursement per day during business travel?", "source": "employee_handbook.md", "expect": "60 EUR"}
+{"question": "How large is the annual training budget per employee?", "source": "employee_handbook.md", "expect": "1,500 EUR"}
+{"question": "How often do passwords expire?", "source": "it_security_policy.txt", "expect": "180 days"}
+{"question": "Are SMS codes accepted as a second factor?", "source": "it_security_policy.txt", "expect": "SMS codes are not accepted"}
+{"question": "How quickly must a lost or stolen laptop be reported?", "source": "it_security_policy.txt", "expect": "within 1 hour"}
+{"question": "Can confidential data be uploaded to external online AI services?", "source": "it_security_policy.txt", "expect": "never be uploaded to external online AI services"}
+{"question": "Within how many hours must a personal-data breach notification decision be made?", "source": "it_security_policy.txt", "expect": "72 hours"}
+{"question": "How much memory does a 7 billion parameter model need with 4-bit quantisation?", "source": "local_llm_guide.pdf", "expect": "4 to 5 GB"}
+{"question": "What chunk size is a good starting point for a RAG system?", "source": "local_llm_guide.pdf", "expect": "500 to 1,000 characters"}
+{"question": "What does mean reciprocal rank reward?", "source": "local_llm_guide.pdf", "expect": "ranking the correct passage higher"}
+{"question": "Which server offers an OpenAI-compatible API with continuous batching?", "source": "local_llm_guide.pdf", "expect": "vLLM"}
+{"question": "Why do scanned PDFs need OCR before indexing?", "source": "local_llm_guide.pdf", "expect": "Scanned PDFs need optical character recognition"}
+{"question": "What is the capital of France?", "source": null, "expect": null}
+{"question": "Who won the football World Cup in 2018?", "source": null, "expect": null}
+{"question": "What is the current stock price of Northwind?", "source": null, "expect": null}
+{"question": "What is the dress code in the office?", "source": null, "expect": null}

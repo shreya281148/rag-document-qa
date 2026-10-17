@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Local vector database and uploads (your documents never belong in git)
+.chroma/
+data/
+uploads/
+
+# Secrets / local overrides
+.env
+config.local.yaml
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Streamlit secrets
+.streamlit/secrets.toml

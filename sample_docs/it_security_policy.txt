@@ -1,0 +1,31 @@
+NORTHWIND LOGISTICS - IT SECURITY POLICY (fictional sample)
+
+This is a made-up document used to demonstrate the document Q&A system. It contains no real company data.
+
+1. PASSWORDS AND ACCESS
+
+Passwords must be at least 14 characters long and must not be reused across systems. Passwords expire every 180 days. Employees must use the company password manager and must never share credentials, not even with colleagues or the IT helpdesk. Access rights follow the principle of least privilege: each person only gets the permissions needed for their job. Access is reviewed every quarter by the system owner.
+
+2. MULTI-FACTOR AUTHENTICATION
+
+Multi-factor authentication (MFA) is mandatory for e-mail, the VPN, the HR portal and every administrative account. Hardware security keys are issued to administrators. SMS codes are not accepted as a second factor because they can be intercepted.
+
+3. DEVICES
+
+Company laptops use full-disk encryption and are patched automatically every week. Lost or stolen devices must be reported to the IT service desk within 1 hour so that they can be locked and wiped remotely. USB storage devices are blocked by default. Employees must lock their screen whenever they leave their desk.
+
+4. DATA CLASSIFICATION
+
+Information is classified into four levels: Public, Internal, Confidential and Strictly Confidential. Confidential and Strictly Confidential data must never be uploaded to external online AI services or public file-sharing sites. Only approved tools that run inside the company network may process such data. Strictly Confidential data must be encrypted at rest and in transit.
+
+5. INCIDENT REPORTING
+
+Any suspected security incident, such as a phishing e-mail that was clicked, malware, or unauthorised access, must be reported to security@northwind.example within 1 hour of discovery. Employees should not try to investigate or delete evidence themselves. The security team classifies each incident and informs management within 24 hours for serious cases. Personal-data breaches must be reported to the data protection officer, who decides on notification of the authorities within 72 hours.
+
+6. BACKUPS
+
+Business-critical systems are backed up every night. Backups are encrypted and stored in a separate location. Restore tests are performed twice a year.
+
+7. THIRD PARTIES
+
+Suppliers who access company systems must sign a security agreement and use individual accounts. Shared supplier accounts are not permitted.
